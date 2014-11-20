@@ -8,11 +8,11 @@
 
 2 - Usage
 
-  res = Tor::HTTP.get("google.com", "/", 80)
+  res = Tor::HTTP.get("google.com", {}, "/", 80)
   p res.code
   p res.body
 
-  res = Tor::HTTP.post('posttestserver.com', {"var" => "variable"}, '/post.php?dir=example', 80)
+  res = Tor::HTTP.post('posttestserver.com', {post_options:{"var" => "variable"}}, '/post.php?dir=example', 80)
   p res.code
   p res.body
 
@@ -23,7 +23,7 @@ with URIs (http & https)
   Tor::HTTP.post(URI('http://posttestserver.com/post.php?dir=example'), {"var" => "variable"})
 
 with redirects
-  res = Tor::HTTP.get("google.com", "/", 80, 10)
+  res = Tor::HTTP.get("google.com", {}, "/", 80, 10)
   By default 3 redirects are followed. 
   To prevent infinite loops a TooManyRedirects error is raised.
   The limit can be changed by updating the last parameter.
@@ -41,6 +41,9 @@ You can also set additional custom header fields, e.g. User-Agent:
     config.add_header('User-Agent', 'Netscape 2.0')
   end
 
+You can set additional custom header fields for each request
+  Tor::HTTP.get("google.com", {headers: {"Content-Type" => "application/json"}}, "/", 80)
+  Tor::HTTP.get(URI('http://google.com/'), {headers: {"Content-Type" => "application/json"}})
 
 
 == Contributing to tor_requests
