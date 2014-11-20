@@ -24,9 +24,7 @@ module Tor
       start_params = start_parameters(uri_or_host, host, port)
       start_socks_proxy(start_params) do |http|
         request = Net::HTTP::Get.new(path || uri_or_host.path)
-
         new_headers = options[:headers] ? Tor.configuration.headers.merge(options[:headers]) : Tor.configuration.headers
-
         new_headers.each do |header, value|
           request.delete(header)
           request.add_field(header, value)
@@ -53,7 +51,8 @@ module Tor
       start_socks_proxy(start_params) do |http|
         request = Net::HTTP::Post.new(path)
         request.set_form_data(options[:post_options]||{})
-        Tor.configuration.headers.each do |header, value|
+        new_headers = options[:headers] ? Tor.configuration.headers.merge(options[:headers]) : Tor.configuration.headers
+        new_headers.each do |header, value|
           request.delete(header)
           request.add_field(header, value)
         end
